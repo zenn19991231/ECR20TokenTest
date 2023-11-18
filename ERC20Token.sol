@@ -1,19 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract KryptoToy is ERC721 {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+contract MyToken is ERC20, ERC20Burnable, Ownable {
+    constructor(address initialOwner)
+        ERC20("ZennToken", "ZTK")
+        Ownable(initialOwner)
+    {}
 
-    constructor() ERC721("KryptoToy", "KT") {}
-
-    function mint(address to) public {
-        uint256 tokenId = _tokenIds.current();
-        _mint(to, tokenId);
-
-        _tokenIds.increment();
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
     }
 }
